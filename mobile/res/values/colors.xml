@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ===== Bento 控制台 · 浅色主题 =====
+         页面冷灰底 + 纯白卡片 + emerald 主色，关键对比度均过 WCAG AA -->
+    <color name="bg">#FFF2F7FA</color>
+    <color name="card">#CFFFFFFF</color>
+    <color name="stroke">#B3FFFFFF</color>
+    <color name="tile">#8FFFFFFF</color>
+    <color name="divider">#337587A3</color>
+
+    <color name="text">#FF14213D</color>
+    <color name="text_dim">#FF5F6F89</color>
+    <color name="text_faint">#FF8A97AA</color>
+
+    <!-- emerald 主色：白底对比 4.0:1，加粗大字达标 AA；深版 5.4:1 用于小字 -->
+    <color name="accent">#FF397FF5</color>
+    <color name="accent_bright">#FF5B8FF9</color>
+    <color name="accent_soft">#FFDCEAFF</color>
+    <color name="accent_deep">#FF2765CC</color>
+
+    <color name="blue">#FF5B8FF9</color>
+    <color name="blue_soft">#FFDCEAFF</color>
+    <color name="purple">#FF8B7CF6</color>
+    <color name="purple_soft">#FFE9E6FF</color>
+
+    <color name="warn">#FFB45309</color>
+    <color name="warn_soft">#FFFEF3C7</color>
+    <color name="danger">#FFE11D48</color>
+    <color name="danger_soft">#FFFFE4E6</color>
+
+    <!-- 兼容旧布局引用 -->
+    <color name="accent2">#FF7C3AED</color>
+    <color name="accent3">#FF2563EB</color>
+    <color name="surface">#CFFFFFFF</color>
+    <color name="track">#FFEEF1F5</color>
+    <color name="glass">#B3FFFFFF</color>
+    <color name="glass_stroke">#E6FFFFFF</color>
+    <color name="idle">#FF94A3B8</color>
+
+    <!-- 兼容旧 drawable 残留引用 -->
+    <color name="accent_dim">#FF94A3B8</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="ic_bg">#FF397FF5</color>
+    <color name="ic_fg">#FFFFFFFF</color>
+
+    <!-- 小组件专用（纯透明背景上的浅色文字，配深色光晕；勿与 App 内同名色混用） -->
+    <color name="wtext">#FFFFFFFF</color>
+    <color name="wtext_dim">#FFC7D0DC</color>
+    <color name="wtext_faint">#FF9AA6B8</color>
+    <color name="wmint">#FF34D399</color>
+    <color name="wpurple">#FFC4B5FD</color>
+    <color name="wamber">#FFFBBF24</color>
+</resources>

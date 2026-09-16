@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg"
+    android:fitsSystemWindows="true"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_settings"
+        android:textColor="@color/text"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="填写伴侣服务地址后，手机可实时读取电脑上的积分与任务"
+        android:textColor="@color/text_dim"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_card"
+        android:layout_marginTop="22dp"
+        android:padding="18dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="公网地址 · 人在外面走这个"
+            android:textColor="@color/accent"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etHost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="https://xxx.trycloudflare.com"
+            android:textColor="@color/text"
+            android:textColorHint="@color/idle"
+            android:textSize="14sp"
+            android:inputType="textUri"
+            android:fontFamily="monospace"
+            android:background="@drawable/bg_row"
+            android:padding="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="局域网地址 · 在家同一 WiFi 走这个（更快）"
+            android:textColor="@color/text_dim"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etLan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="http://192.168.1.100:8791"
+            android:textColor="@color/text"
+            android:textColorHint="@color/idle"
+            android:textSize="14sp"
+            android:inputType="textUri"
+            android:fontFamily="monospace"
+            android:background="@drawable/bg_row"
+            android:padding="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/hint_token"
+            android:textColor="@color/text_dim"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etToken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="可留空"
+            android:textColor="@color/text"
+            android:textColorHint="@color/idle"
+            android:textSize="14sp"
+            android:inputType="text"
+            android:fontFamily="monospace"
+            android:background="@drawable/bg_row"
+            android:padding="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/lbl_interval"
+            android:textColor="@color/text_dim"
+            android:textSize="12sp" />
+
+        <Spinner
+            android:id="@+id/spInterval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_row"
+            android:padding="8dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="18dp">
+
+        <Button
+            android:id="@+id/btnTest"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_test"
+            android:textAllCaps="false"
+            android:textColor="@color/text"
+            android:background="@drawable/bg_row" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="@string/btn_save"
+            android:textAllCaps="false"
+            android:textColor="@color/bg"
+            android:backgroundTint="@color/accent" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text=""
+        android:textColor="@color/text_dim"
+        android:textSize="12sp"
+        android:fontFamily="monospace" />
+
+</LinearLayout>
