@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { CRED_FILE } from './config.js';
-import { readLocalAuth, isExpired } from './auth-reader.js';
+import { readLocalAuth, readKnownLocalAuth, isExpired } from './auth-reader.js';
+import { validateAccessToken } from './wb-api.js';
 
 const EMPTY = { settings: { autoCheckinCN: true, autoCheckinTimes: ['09:00', '21:00'], expireAutoDisable: true, expireAutoDelete: false }, accounts: [] };
 
@@ -37,6 +38,8 @@ export function importLocal(store) {
     uid: local.uid,
     token: local.token,
     expiresAt: local.expiresAt,
+    refreshToken: local.refreshToken,
+    refreshExpiresAt: local.refreshExpiresAt,
     tokenType: local.tokenType,
     region: 'CN',
     source: 'local',
@@ -47,6 +50,8 @@ function upsert(store, info) {
   const existing = store.accounts.find((a) => a.uid && info.uid && a.uid === info.uid);
   if (existing) {
     existing.token = info.token;
+    existing.refreshToken = info.refreshToken || existing.refreshToken;
+    existing.refreshExpiresAt = info.refreshExpiresAt || existing.refreshExpiresAt;
     existing.expiresAt = info.expiresAt || existing.expiresAt;
     existing.nickname = info.nickname || existing.nickname;
     existing.phone = info.phone || existing.phone;
@@ -63,6 +68,8 @@ function upsert(store, info) {
     phone: info.phone || null,
     uid: info.uid || null,
     token: info.token,
+    refreshToken: info.refreshToken || null,
+    refreshExpiresAt: info.refreshExpiresAt || null,
     apiBase: info.apiBase || null,
     claimEndpoint: info.claimEndpoint || null,
     expiresAt: info.expiresAt || null,
@@ -73,6 +80,48 @@ function upsert(store, info) {
   };
   store.accounts.push(acc);
   return { added: true, id: acc.id };
+}
+
+export async function selectValidAuth(candidates, validate = validateAccessToken) {
+  const ordered = [...candidates].sort((a, b) => Number(b.expiresAt || 0) - Number(a.expiresAt || 0));
+  for (const candidate of ordered) {
+    const result = await validate(candidate.token, candidate.apiBase || undefined);
+    if (result.ok) return { candidate, result };
+  }
+  return null;
+}
+
+// 只更新凭证池中已有账号。历史候选必须先通过官方接口验证，已删除账号不会复活。
+export async function importKnownLocal(store, validate = validateAccessToken) {
+  const known = readKnownLocalAuth();
+  let updated = 0;
+  const accounts = [];
+  for (const existing of store.accounts) {
+    const candidates = known.filter((info) => existing.uid && info.uid === existing.uid);
+    candidates.push({
+      uid: existing.uid, token: existing.token, expiresAt: existing.expiresAt,
+      refreshToken: existing.refreshToken, refreshExpiresAt: existing.refreshExpiresAt,
+      apiBase: existing.apiBase,
+    });
+    const selected = await selectValidAuth(candidates, validate);
+    if (!selected) {
+      accounts.push({ id: existing.id, name: existing.name, ok: false, status: null, code: null });
+      continue;
+    }
+    const info = selected.candidate;
+    if (existing.token !== info.token || existing.refreshToken !== (info.refreshToken || existing.refreshToken)) {
+      existing.token = info.token;
+      existing.expiresAt = info.expiresAt || existing.expiresAt;
+      existing.refreshToken = info.refreshToken || existing.refreshToken;
+      existing.refreshExpiresAt = info.refreshExpiresAt || existing.refreshExpiresAt;
+      updated++;
+    }
+    existing.disabled = false;
+    delete existing.disabledReason;
+    accounts.push({ id: existing.id, name: existing.name, ok: true,
+      status: selected.result.status, code: selected.result.code });
+  }
+  return { scanned: known.length, updated, accounts };
 }
 
 export function remove(store, id) {

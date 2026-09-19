@@ -1,6 +1,6 @@
 {
   "name": "workbuddy-multi-account-monitor",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "private": true,
   "type": "module",
   "description": "Privacy-first local multi-account dashboard, Android monitor and daily check-in helper for WorkBuddy",
@@ -10,6 +10,6 @@
     "bridge": "python scripts/run_bridge.py",
     "checkin": "node src/cli.js checkin-all",
     "audit": "python mobile/audit.py",
-    "test": "python mobile/test_daymark.py && python mobile/test_usedtoday_fix.py && python mobile/test_bridge_auth.py"
+    "test": "node --test src/checkin.test.js && python mobile/test_daymark.py && python mobile/test_usedtoday_fix.py && python mobile/test_bridge_auth.py"
   }
 }

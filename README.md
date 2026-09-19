@@ -13,7 +13,7 @@
 - 动态管理任意数量的 CN / Global 账号，不写死账号名称或数量。
 - 汇总余额、套餐周期、今日消耗、本月消耗和任务流水。
 - 对 CN 账号执行幂等每日签到，已签到会安全跳过。
-- Windows 09:00、21:00 与登录后补签。
+- Windows 09:00、21:00 与登录后补签；执行前自动验证并同步所有已导入账号的本地登录态。
 - Android App 提供概览、账号、记录、健康度和风险提醒。
 - Android 桌面小组件显示余额、签到和任务状态。
 - 局域网 HTTP 优先，外网可选 MQTT 会合点。
@@ -128,6 +128,7 @@ powershell -ExecutionPolicy Bypass -File scripts/install_windows_checkin_task.ps
 
 ```bash
 node src/cli.js import-local     # 导入当前 WorkBuddy 登录账号
+node src/cli.js sync-auth        # 在线验证并同步已导入账号的本地登录态快照
 node src/cli.js list             # 查看账号列表，不显示 token
 node src/cli.js refresh-all      # 刷新额度并记录用量
 node src/cli.js checkin-all      # 给所有可签到账号签到
@@ -168,7 +169,7 @@ docs/                   已脱敏公开素材
 
 ## 登录授权说明
 
-WorkBuddy 官方访问令牌不是永久凭证。本项目不会绕过官方认证，也不会把 token 嵌入 APK。官方撤销会话、修改密码或授权真正失效时，需要在 WorkBuddy 中重新登录对应账号并再次导入。
+WorkBuddy 官方访问令牌不是永久凭证。本项目不会绕过官方认证，也不会把 token 嵌入 APK。计划任务会扫描 WorkBuddy 当前及历史登录态，但只采用经官方额度接口验证仍有效的候选，避免“到期时间更晚但已被撤销”的旧 token 覆盖可用账号。官方撤销全部会话、修改密码或所有候选真正失效时，仍需在 WorkBuddy 中重新登录对应账号并再次导入。
 
 ## 发布前测试
 

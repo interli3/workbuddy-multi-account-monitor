@@ -53,6 +53,14 @@ export async function getResources(token, base = DEFAULT_API_BASE) {
   return resources;
 }
 
+// 历史登录态只有在官方接口仍接受时才可覆盖凭证池。
+export async function validateAccessToken(token, base = DEFAULT_API_BASE) {
+  const { ok, status, json } = await jpost(base, '/billing/meter/get-user-resource', token, {});
+  const code = json?.code ?? json?.status ?? null;
+  const businessOk = code == null || Number(code) === 0 || Number(code) === 200;
+  return { ok: Boolean(ok && !json?._raw && businessOk), status, code };
+}
+
 // 签到状态（GET，只读）
 export async function checkinStatus(token, base = DEFAULT_API_BASE) {
   const { json } = await jget(base, '/v2/billing/meter/checkin-activity-status', token);
@@ -63,8 +71,9 @@ export async function checkinStatus(token, base = DEFAULT_API_BASE) {
 export async function dailyCheckin(token, base = DEFAULT_API_BASE) {
   const { ok, status, json } = await jpost(base, '/v2/billing/meter/daily-checkin', token, {});
   const code = json?.code ?? json?.status ?? status;
-  const alreadySigned = ok && (Number(code) === 10001 || json?.data?.checked === true);
-  const success = ok && !json?._raw && (Number(code) === 0 || Number(code) === 200 || alreadySigned);
+  const alreadySigned = (Number(code) === 10001 && (ok || status === 400))
+    || (ok && json?.data?.checked === true);
+  const success = ok && !json?._raw && (Number(code) === 0 || Number(code) === 200);
   return {
     ok: Boolean(success),
     status,

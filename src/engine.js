@@ -41,7 +41,7 @@ export async function refreshAccount(a) {
 export async function checkinAccount(a) {
   const r = await dailyCheckin(a.token, baseOf(a));
   if (r.alreadySigned || r.ok) a.lastCheckin = todayStr();
-  a.lastResult = r.alreadySigned ? '已签(跳过)' : r.ok ? '签到成功' : `失败:${r.status}`;
+  a.lastResult = r.alreadySigned ? '已签(跳过)' : r.ok ? '签到成功' : `失败:${r.code ?? r.status}`;
   return r;
 }
 
@@ -55,7 +55,7 @@ export async function checkinAll(store) {
     if (a.lastCheckin === todayStr()) { results.push({ id: a.id, name: a.name, result: '今日已签(跳过)' }); continue; }
     try {
       const r = await checkinAccount(a);
-      results.push({ id: a.id, name: a.name, result: r.alreadySigned ? '已签(跳过)' : r.ok ? '签到成功' : `失败:${r.status}` });
+      results.push({ id: a.id, name: a.name, result: r.alreadySigned ? '已签(跳过)' : r.ok ? '签到成功' : `失败:${r.code ?? r.status}` });
     } catch (e) {
       results.push({ id: a.id, name: a.name, result: `异常:${String(e?.message || e)}` });
     }

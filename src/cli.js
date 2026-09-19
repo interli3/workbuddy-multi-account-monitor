@@ -1,4 +1,4 @@
-import { load, save, importLocal, applyExpiryPolicy } from './store.js';
+import { load, save, importLocal, importKnownLocal, applyExpiryPolicy } from './store.js';
 import { refreshAccount, checkinAll } from './engine.js';
 import { claimExpertPackage } from './wb-api.js';
 import { discover, clientIdFromToken, profileFromIdToken, genPkce, buildAuthUrl, exchangeCode } from './oidc.js';
@@ -79,6 +79,20 @@ async function main() {
       console.log(JSON.stringify(r, null, 2));
       break;
     }
+    case 'import-known':
+    case 'sync-auth':
+    case 'refresh-tokens': {
+      const store = load();
+      const synced = await importKnownLocal(store);
+      save(store);
+      const results = synced.accounts.map((account) => ({
+        id: account.id, name: account.name,
+        result: account.ok ? '有效:官方接口验证通过' : '失败:没有可用的官方登录凭证',
+      }));
+      console.log(JSON.stringify({ synced, accounts: results }, null, 2));
+      if (results.some((x) => x.result.startsWith('失败:'))) process.exitCode = 1;
+      break;
+    }
     case 'list': {
       const store = load();
       console.log(store.accounts.map((a) => ({ id: a.id, name: a.name, region: a.region, disabled: a.disabled, lastCheckin: a.lastCheckin })));
@@ -135,7 +149,7 @@ async function main() {
       break;
     }
     default:
-      console.log('用法: node src/cli.js <login|import-local|list|refresh-all|checkin-all|claim-all|sessions <uid>|session-export <uid> <sid>|session-import <uid> <sid> <targetUid>>');
+      console.log('用法: node src/cli.js <login|import-local|sync-auth|list|refresh-all|checkin-all|claim-all|sessions <uid>|session-export <uid> <sid>|session-import <uid> <sid> <targetUid>>');
   }
 }
 

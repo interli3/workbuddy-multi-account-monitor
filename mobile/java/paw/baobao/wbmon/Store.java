@@ -22,7 +22,7 @@ public class Store {
     private static final int CFG_VER = 7;
 
     /** 兜底版本号（正常从安装包读取；两者需与 AndroidManifest 同步） */
-    public static final String APP_VER = "3.6";
+    public static final String APP_VER = "3.6.1";
 
     /**
      * 数据新鲜度阈值（毫秒）：超过这个年龄的快照一律视为"过期"。
