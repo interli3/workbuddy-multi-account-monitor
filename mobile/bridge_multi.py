@@ -233,7 +233,14 @@ def load_accounts():
         accs = j.get("accounts") or []
         out = []
         for a in accs:
-            token = a.get("token") or ""
+            raw_token = a.get("token")
+            # WorkBuddy/WorkDaddy may persist DPAPI/envelope-wrapped values as
+            # an object. It is not a usable Bearer token; isolate that account
+            # instead of calling .startswith() on a dict and taking down the
+            # whole snapshot service.
+            token = raw_token if isinstance(raw_token, str) else ""
+            if raw_token and not token:
+                print("  [凭证池] %s 的 token 不是可用字符串，已隔离" % (a.get("name") or a.get("uid") or "账号"))
             expires_at = a.get("expiresAt") or _jwt_exp_ms(token)
             out.append({
                 "id": a.get("id", ""),

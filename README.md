@@ -114,7 +114,7 @@ python mobile/build_apk.py --clean
 
 输出为 `mobile/out/wbmon.apk`。首次构建会在本机生成独立签名密钥和随机密码；请自行备份，丢失后无法覆盖升级原 APK。自己配置后构建的 APK 已内置本机局域网地址和伴侣服务令牌，但不会包含 WorkBuddy 登录令牌。
 
-如果使用 GitHub Release 中不绑定任何电脑的通用 APK，请先在电脑运行 `python scripts/configure.py`，再把 App 设置中的“局域网地址”和“伴侣服务令牌”分别填写为 `config.local.json` 的 `lanUrl` 与 `bridgeToken`。
+如果使用 GitHub Release 中不绑定任何电脑的通用 APK，它不会包含维护者的地址、令牌或 MQTT 主题；请先在电脑运行 `python scripts/configure.py`，再把 App 设置中的“局域网地址”和“伴侣服务令牌”分别填写为 `config.local.json` 的 `lanUrl` 与 `bridgeToken`。你的个人绑定 APK 不应上传到 GitHub，包名为 `paw.baobao.wbmon`；公开通用 APK 的包名为 `io.github.workbuddymonitor`，两者是不同产品包。
 
 ### 6. 安装 Windows 自动签到
 

@@ -8,7 +8,9 @@ function readAuthFile(p) {
     const o = JSON.parse(fs.readFileSync(p, 'utf8'));
     const acc = o.account || o.accounts?.[0] || o.allAccounts?.[0] || {};
     const auth = o.auth || {};
-    if (!auth.accessToken || !acc.uid) return null;
+    // WorkBuddy/WorkDaddy may persist DPAPI/envelope-wrapped values. They are
+    // not usable Bearer strings; ignore them instead of poisoning the pool.
+    if (typeof auth.accessToken !== 'string' || !auth.accessToken || !acc.uid) return null;
     return {
       source: p,
       uid: acc.uid,
@@ -19,7 +21,7 @@ function readAuthFile(p) {
       token: auth.accessToken,
       tokenType: auth.tokenType || 'Bearer',
       expiresAt: auth.expiresAt || null,
-      refreshToken: auth.refreshToken || null,
+      refreshToken: typeof auth.refreshToken === 'string' ? auth.refreshToken : null,
       refreshExpiresAt: auth.refreshExpiresAt || null,
     };
   } catch {

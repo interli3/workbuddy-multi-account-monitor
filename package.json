@@ -1,6 +1,6 @@
 {
   "name": "workbuddy-multi-account-monitor",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "private": true,
   "type": "module",
   "description": "Privacy-first local multi-account dashboard, Android monitor and daily check-in helper for WorkBuddy",

@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.6.2 - 2026-09-20
+
+- Isolate WorkBuddy/WorkDaddy envelope-wrapped credentials instead of crashing the bridge snapshot service.
+- Keep `/health` available and return a partial, explicit account error when one credential cannot be used.
+- Clarify the difference between the personal configured APK and the unconfigured public generic APK.
+
 ## 3.6.1 - 2026-09-19
 
 - Validate every cached login candidate against the official resource endpoint before replacing an account token.
